@@ -111,7 +111,7 @@ def run_captioning(images, concept_sentence, *captions):
         if isinstance(image_path, str):  # If image is a file path
             image = Image.open(image_path).convert("RGB")
 
-        prompt = "<DETAILED_CAPTION>"
+        prompt = "<DETAILED_CAPTION_OF_SKIN_AND_HUMAN_ONLY>"
         inputs = processor(text=prompt, images=image, return_tensors="pt").to(device, torch_dtype)
 
         generated_ids = model.generate(
@@ -122,7 +122,7 @@ def run_captioning(images, concept_sentence, *captions):
         parsed_answer = processor.post_process_generation(
             generated_text, task=prompt, image_size=(image.width, image.height)
         )
-        caption_text = parsed_answer["<DETAILED_CAPTION>"].replace("The image shows ", "")
+        caption_text = parsed_answer["<DETAILED_CAPTION_OF_SKIN_AND_HUMAN_ONLY>"].replace("The image shows ", "")
         if concept_sentence:
             caption_text = f"{caption_text} [trigger]"
         captions[i] = caption_text
